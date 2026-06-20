@@ -1,0 +1,39 @@
+name: Auto-post all brands to Threads
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: threads-poster
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+      - name: Run multi-brand poster
+        env:
+          DRY_RUN: ${{ vars.DRY_RUN }}
+          # === brand별 secret (brand 추가 시 여기 2줄씩 추가) ===
+          THREADS_TOKEN_WINCHINA:  ${{ secrets.THREADS_TOKEN_WINCHINA }}
+          THREADS_USERID_WINCHINA: ${{ secrets.THREADS_USERID_WINCHINA }}
+          THREADS_TOKEN_REDTRANS:  ${{ secrets.THREADS_TOKEN_REDTRANS }}
+          THREADS_USERID_REDTRANS: ${{ secrets.THREADS_USERID_REDTRANS }}
+        run: node scripts/post-all.mjs
+      - name: Commit posted logs
+        run: |
+          if [[ -n "$(git status --porcelain brands)" ]]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add brands/*/posted.log brands/*/posted.json
+            git commit -m "chore: mark posted $(date -u +%FT%TZ)"
+            git push
+          else echo "no change"; fi
