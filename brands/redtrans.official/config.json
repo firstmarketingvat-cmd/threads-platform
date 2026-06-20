@@ -1,0 +1,29 @@
+{
+  "id": "redtrans.official",
+  "name": "redtrans.official",
+  "name_local": "",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@redtrans.official",
+  "colors": {
+    "ink": "#222222",
+    "red": "#f8c807",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "콘텐츠 방향\n\"* 번역-공증-인증-아포-대사 인증: 70%\n- 번역: 번역 가능한 언어/분야, 필요한 상황, 번역 언어의 재미있는 점, 어려운 점, 주의, 자주 묻는 질문\n- 공증: 번역공증/공증만, 필요 상황, 공증 정의/필요성, 주의, 헷갈리는 점, 공증 종류, 필요 서류, 자주 묻는 질문\n- 아포: 협업/비협업국가, 진행 가능/불가능, 절차, 방법, 주의, 문제, 꿀팁, 전문가 코맨트, 최신 소식, 필요 서류, 자주 묻는 질문\n- 대사관/영사관 인증: 필요한 상황, 서류, 국가\n=> 실제 사례 -> 경험, 꿀팁 -> 실무 진행 \n\n* 베트남: 30%\n- 법인설립 - 위생허가 - 상표등록\n=> 주의, 서류, 절차, 문제, 사례 => 경험, 꿀팁, 전문 경험\n\n목적: 브랜드 기억 남기/ 신뢰/ 전문성/ 잠재고객 유입\"",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_REDTRANS.OFFICIAL",
+    "token_secret": "THREADS_TOKEN_REDTRANS.OFFICIAL"
+  },
+  "schedule": {
+    "weekday": [
+      "08:30",
+      "21:00"
+    ],
+    "weekend": [
+      "10:30",
+      "20:30"
+    ],
+    "timezone": "Asia/Seoul"
+  }
+}
