@@ -1,0 +1,30 @@
+{
+  "id": "redtrans",
+  "name": "RedTrans Insight",
+  "name_local": "레드트랜스",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@redtrans_insight.vn",
+  "colors": {
+    "ink": "#222222",
+    "red": "#25f82b",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "반말, '직접 겪은 것만 과장 없이', 기회+리스크 균형, CTA 1/3, 질문 유도. 한-베 무역·현지화·번역.",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_REDTRANS",
+    "token_secret": "THREADS_TOKEN_REDTRANS"
+  },
+  "schedule": {
+    "note": "VN 시간 표시 / 한국 골든타임 기준",
+    "weekday": [
+      "06:30",
+      "19:00"
+    ],
+    "weekend": [
+      "08:30",
+      "18:30"
+    ],
+    "timezone": "Asia/Ho_Chi_Minh"
+  }
+}
