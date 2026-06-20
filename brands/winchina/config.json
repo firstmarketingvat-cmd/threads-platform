@@ -1,0 +1,11 @@
+﻿{
+  "id": "winchina",
+  "name": "WinChina",
+  "name_local": "윈차이나",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@winchina_official",
+  "colors": { "ink": "#2b2422", "red": "#e8252f", "bg": "#ffffff", "muted": "#6b625e" },
+  "voice_summary": "반말/해라체, 실무 인사이더, 이모지 절제, 【 】 강조, CTA 1/3, 페인포인트→서비스 피벗. 중국 비자 전 분야.",
+  "threads": { "user_id_secret": "THREADS_USERID_WINCHINA", "token_secret": "THREADS_TOKEN_WINCHINA" },
+  "schedule": { "note": "VN 시간 표시 / 한국 골든타임 기준", "weekday": ["06:30", "19:00"], "weekend": ["08:30", "18:30"], "timezone": "Asia/Ho_Chi_Minh" }
+}
