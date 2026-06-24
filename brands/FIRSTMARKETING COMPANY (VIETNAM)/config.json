@@ -1,0 +1,30 @@
+{
+  "id": "FIRSTMARKETING COMPANY (VIETNAM)",
+  "name": "FIRSTMARKETING COMPANY (VIETNAM)",
+  "name_local": "FIRSTMARKETING COMPANY (VIETNAM)",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@firstmkt.vn?xmt=AQG0SBkOENrTWiXP-M-uoCmGQ1wfRP8TiTHt5fSwSFR6gg",
+  "colors": {
+    "ink": "#222222",
+    "red": "#e23b3b",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "베트남 로컬을 움직이는 마케팅 파트너\n📁 브랜드•콘텐츠•인플루언서•커머스•퍼포먼스\n📬 info@firstmkt.co.kr",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_FIRSTMARKETING_COMPANY__VIETNAM_",
+    "token_secret": "THREADS_TOKEN_FIRSTMARKETING_COMPANY__VIETNAM_"
+  },
+  "schedule": {
+    "weekday": [
+      "08:30",
+      "21:00"
+    ],
+    "weekend": [
+      "10:30",
+      "20:30"
+    ],
+    "timezone": "Asia/Seoul"
+  },
+  "card_style": "editorial"
+}
