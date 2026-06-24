@@ -1,0 +1,30 @@
+{
+  "id": "HAOFACTORY",
+  "name": "HAOFACTORY",
+  "name_local": "HAOFACTORY",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@hao_factory?xmt=AQF0EL7e3geajL6eriG-44ueNovnT0UA4spGaV9H5gMV8Q",
+  "colors": {
+    "ink": "#222222",
+    "red": "#804000",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "공간에 예술을 입히다\n시선을 사로잡는 조형물 제작소",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_HAOFACTORY",
+    "token_secret": "THREADS_TOKEN_HAOFACTORY"
+  },
+  "schedule": {
+    "weekday": [
+      "08:30",
+      "21:00"
+    ],
+    "weekend": [
+      "10:30",
+      "20:30"
+    ],
+    "timezone": "Asia/Seoul"
+  },
+  "card_style": "photo"
+}
