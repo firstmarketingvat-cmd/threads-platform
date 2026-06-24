@@ -1,0 +1,30 @@
+{
+  "id": "FIRSTDESIGN",
+  "name": "FIRST DESIGN\t",
+  "name_local": "FIRST DESIGN\t",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@design._.first",
+  "colors": {
+    "ink": "#222222",
+    "red": "#6cb089",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "대구·경북 전문 종합 디자인·마케팅",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_FIRSTDESIGN",
+    "token_secret": "THREADS_TOKEN_FIRSTDESIGN"
+  },
+  "schedule": {
+    "weekday": [
+      "08:30",
+      "21:00"
+    ],
+    "weekend": [
+      "10:30",
+      "20:30"
+    ],
+    "timezone": "Asia/Seoul"
+  },
+  "card_style": "bold"
+}
