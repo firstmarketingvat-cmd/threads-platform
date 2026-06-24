@@ -1,0 +1,17 @@
+# Bí mật — KHÔNG đưa vào image (set bằng biến môi trường trên cloud)
+.pexels-key
+deploy.json
+*.token
+
+# File tạm / thử nghiệm
+_*.mjs
+_*.png
+_*.html
+_*.json
+thumb-*.png
+*.output
+
+# Git & linh tinh
+.git
+.gitignore
+node_modules
