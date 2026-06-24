@@ -1,0 +1,30 @@
+{
+  "id": "HAODESIGN",
+  "name": "HAODESIGN",
+  "name_local": "HAODESIGN",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@haodesign_official",
+  "colors": {
+    "ink": "#222222",
+    "red": "#00ffff",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "26년 경력의 실장디자이너 직접 설계\n번역 작업 직접 진행, 빠른 견적제공\n\n◼ 편집디자인 전문 ◼\n카탈로그｜브로슈어｜리플렛\n팜플렛｜포스터｜전단지",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_HAODESIGN",
+    "token_secret": "THREADS_TOKEN_HAODESIGN"
+  },
+  "schedule": {
+    "weekday": [
+      "08:30",
+      "21:00"
+    ],
+    "weekend": [
+      "10:30",
+      "20:30"
+    ],
+    "timezone": "Asia/Seoul"
+  },
+  "card_style": "dark"
+}
