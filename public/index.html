@@ -1,0 +1,501 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Threads Multi-Brand Manager</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Malgun Gothic","Segoe UI",sans-serif;background:#f4f5f7;color:#1c1c1e}
+header{background:#111;color:#fff;padding:14px 22px;display:flex;align-items:center;gap:12px}
+header b{font-size:18px}header span{color:#9aa;font-size:13px}
+.wrap{display:flex;min-height:calc(100vh - 52px)}
+.side{width:230px;background:#fff;border-right:1px solid #e5e7eb;padding:14px}
+.side h3{font-size:12px;color:#888;text-transform:uppercase;margin:6px 4px 10px}
+.brand{padding:10px 12px;border-radius:10px;cursor:pointer;margin-bottom:6px;border:1px solid transparent}
+.brand:hover{background:#f1f2f4}.brand.on{background:#eef2ff;border-color:#c7d2fe}
+.brand .nm{font-weight:700}.brand .meta{font-size:12px;color:#888;margin-top:2px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.addbtn{width:100%;margin-top:8px;padding:9px;border:1px dashed #bbb;background:#fafafa;border-radius:10px;cursor:pointer;color:#555}
+.main{flex:1;padding:22px;max-width:1340px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{padding:9px 14px;border:0;border-radius:9px;background:#111;color:#fff;cursor:pointer;font-weight:600}
+.btn.ghost{background:#fff;border:1px solid #ddd;color:#222}
+.btn.sm{padding:6px 10px;font-size:13px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:16px;margin-bottom:12px}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.b-posted{background:#dcfce7;color:#166534}.b-scheduled{background:#dbeafe;color:#1e40af}.b-draft{background:#fef3c7;color:#92400e}
+.post{display:flex;gap:14px}.post img{width:78px;height:98px;object-fit:cover;border-radius:8px;border:1px solid #eee;background:#fafafa}
+.post .txt{flex:1;white-space:pre-wrap;font-size:14px;line-height:1.5;color:#333;max-height:160px;overflow:auto}
+.postrow{display:flex;gap:14px;align-items:stretch;margin-bottom:12px}
+.postrow .card{flex:1;margin-bottom:0;min-width:0}
+.srcpanel{width:320px;flex:none;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:14px;font-size:12.5px;line-height:1.55;color:#555;overflow:auto;max-height:360px}
+.srcpanel .h{font-weight:800;color:#374151;font-size:12px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.srcpanel .body{white-space:pre-wrap}
+.srcpanel a{color:#2563eb;word-break:break-all}
+.srcpanel .empty{color:#b0b4ba;font-style:italic}
+.srcpanel .add{cursor:pointer;color:#6366f1;font-weight:700;font-style:normal}
+.muted{color:#888;font-size:13px}
+input,textarea,select{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-family:inherit;font-size:14px;margin-top:4px}
+textarea{min-height:120px;resize:vertical}
+label{font-size:12px;color:#555;font-weight:600}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:20px;z-index:9}
+.modal .box{background:#fff;border-radius:16px;padding:22px;max-width:640px;width:100%;max-height:90vh;overflow:auto}
+.pillars{font-size:13px;color:#555;background:#f8f8f8;border-radius:8px;padding:10px;margin-top:8px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.cal .hd{font-size:12px;color:#888;font-weight:700;text-align:center;padding:4px}
+.cal .cell{background:#fff;border:1px solid #eceef0;border-radius:9px;min-height:104px;padding:7px}
+.cal .cell.empty{background:transparent;border:0}
+.cal .day{font-weight:700;color:#666;font-size:12px;margin-bottom:5px}
+.cal .today{outline:2px solid #6366f1}.cal .today .day{color:#6366f1}
+.cal .ev{display:flex;align-items:center;gap:5px;margin-bottom:4px;cursor:pointer;font-size:11px;background:#f7f8fa;border-radius:6px;padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal .ev .d{width:8px;height:8px;border-radius:50%;flex:none}
+.cal .ev .tm{color:#999;font-variant-numeric:tabular-nums}
+.leg{display:flex;gap:16px;margin:8px 0;align-items:center;flex-wrap:wrap}
+.studio{display:grid;grid-template-columns:312px 1fr;gap:20px;align-items:start}
+.pvwrap{position:sticky;top:0}
+.pvcard{width:300px;height:375px;border-radius:12px;overflow:hidden;position:relative;border:1px solid #e5e7eb;font-family:"Pretendard","Malgun Gothic",sans-serif;background:#fff}
+.pvhint{font-size:11px;color:#999;text-align:center;margin-top:6px}
+.fld{margin-bottom:9px}.fld label{display:block;margin-bottom:2px}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;max-height:212px;overflow:auto;margin-top:8px;padding:2px}
+.thumbs img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent}
+.thumbs img.sel{border-color:#6366f1;box-shadow:0 0 0 2px #c7d2fe}
+.imgtab{display:flex;gap:6px;margin-bottom:6px}
+.imgtab button{padding:6px 12px;border:1px solid #ddd;border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#444}
+.imgtab button.on{background:#111;color:#fff;border-color:#111}
+.sec{border-top:1px solid #eee;margin-top:12px;padding-top:10px}
+.sec h4{font-size:12px;color:#888;text-transform:uppercase;margin-bottom:6px;letter-spacing:.5px}
+</style></head><body>
+<header><b>🧵 Threads Multi-Brand Manager</b><span id="hSub"></span>
+  <div style="margin-left:auto" class="row">
+    <button class="btn ghost sm" id="langBtn" onclick="toggleLang()" title="한국어 / Tiếng Việt"></button>
+    <button class="btn ghost sm" id="btnCal" onclick="showCalendar()"></button>
+    <button class="btn ghost sm" id="btnSync" onclick="sync()"></button>
+    <button class="btn ghost sm" onclick="pexelsKey()" title="Pexels API key — ảnh thật">🖼️ Pexels</button>
+    <button class="btn sm" id="btnDeploy" onclick="deploy()"></button>
+  </div>
+</header>
+<div class="wrap">
+  <div class="side"><h3 id="sideH"></h3><div id="brandList"></div><button class="addbtn" id="addBtn" onclick="openAdd()"></button></div>
+  <div class="main" id="main"></div>
+</div>
+
+<div class="modal" id="addM"><div class="box">
+  <h2 id="am_title"></h2>
+  <div class="grid2" style="margin-top:12px">
+    <div><label id="am_l_id"></label><input id="f_id" placeholder="vd: mybrand"></div>
+    <div><label id="am_l_name"></label><input id="f_name" placeholder="My Brand"></div>
+    <div><label id="am_l_local"></label><input id="f_local" placeholder="마이브랜드"></div>
+    <div><label id="am_l_lang"></label><input id="f_lang" value="ko"></div>
+    <div style="grid-column:1/3"><label id="am_l_url"></label><input id="f_url" placeholder="https://www.threads.com/@..."></div>
+    <div><label id="am_l_red"></label><input id="f_red" value="#e23b3b"></div>
+    <div><label id="am_l_ink"></label><input id="f_ink" value="#222222"></div>
+    <div style="grid-column:1/3"><label id="am_l_voice"></label><textarea id="f_voice" style="min-height:70px" placeholder="반말, 이모지 절제, CTA 1/3..."></textarea></div>
+  </div>
+  <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn ghost" id="am_cancel" onclick="closeAdd()"></button><button class="btn" id="am_ok" onclick="addBrand()"></button></div>
+</div></div>
+
+<script>
+/* ===== i18n (KR / VN bilingual) ===== */
+const I18N = {
+  vi: {
+    sub:"quản lý nhiều brand", cal:"📅 Tất cả brand", sync:"🔄 Sync", deploy:"🚀 Deploy lên GitHub",
+    syncTip:"Kéo trạng thái đã đăng + link từ GitHub về", langNext:"🇰🇷 한국어",
+    brands:"Brands", addBrand:"+ Thêm brand", noBrand:"Chưa có brand.",
+    pickBrand:"Chọn 1 brand bên trái để xem lịch nội dung.",
+    cPosted:"đã đăng", cSched:"lịch", cDraft:"nháp",
+    rerender:"🎨 Render lại ảnh", copyPrompt:"📋 Copy prompt", addPost:"+ Thêm bài",
+    schedule:"Lịch nội dung", noPost:'Chưa có bài. Bấm "Copy prompt" → chạy trong Claude → "Thêm bài".',
+    stPosted:"✅ đã đăng", stSched:"🔵 đã lên lịch", stDraft:"🟡 nháp",
+    viewPost:"🔗 Xem bài", editLink:"🔗 Sửa link", markBtn:"✓ Đã đăng",
+    srcHead:"📎 Nguồn viết bài", srcEmpty:"Chưa có nguồn — bấm ✏️ để thêm", colorTip:"Màu ký hiệu brand — đổi là cập nhật ngay",
+    designTip:"Kiểu thiết kế thẻ của brand này", aReStyle:(n,s)=>`Đổi thiết kế sang ${s}. Render lại ${n} ảnh (chưa khóa kiểu riêng) luôn không?`,
+    view:"Xem ảnh", download:"Tải ảnh", close:"Đóng", reRender:"Tạo lại ảnh", shuffle:"Đổi ảnh khác", lPhoto:"Từ khóa ảnh (Pexels) — để có ảnh thật", lStyle:"Kiểu thẻ ảnh",
+    eEdit:"Sửa bài", eAdd:"Thêm bài",
+    lDate:"Ngày (YYYY-MM-DD)", lTime:"Giờ đăng (HH:MM)", lTopic:"Topic tag (1 cái)",
+    lContent:"Nội dung bài (원고)", lSources:"Nguồn để viết (link + ghi chú)",
+    srcPh:"Dán link + ghi chú nguồn ở đây\nVD:\nhttps://threads.com/@... — người dùng hỏi về visa\nhttps://news... — chính sách mới",
+    lKicker:"Card kicker", lTag:"Card tag", lHeadline:"Card headline (\\n xuống dòng)",
+    lBody:"Card body (\\n xuống dòng)", lCover:"🫥 Che-mờ tạo tò mò (cover — để trống nếu không dùng)",
+    lHint:"Badge hint (khi có cover)", delPost:"🗑️ Xóa bài", cancel:"Hủy", save:"Lưu",
+    amTitle:"Thêm brand mới", amId:"ID (chữ thường, không dấu)", amName:"Tên brand",
+    amLocal:"Tên hiển thị (bản địa)", amLang:"Ngôn ngữ", amUrl:"Link Threads",
+    amRed:"Màu nhấn (red)", amInk:"Màu chữ (ink)", amVoice:"Tóm tắt giọng văn", amOk:"Tạo brand",
+    calMonth:"Tháng", calAll:"tất cả brand", prev:"Tháng trước", next:"Tháng sau",
+    pickMonth:"Chọn tháng/năm", legTime:"giờ = 🇻🇳VN", weekdays:["T2","T3","T4","T5","T6","T7","CN"],
+    dTitle:"⚙️ Cài đặt Deploy", dDesc:"Đẩy bài/ảnh lên repo GitHub để cron tự đăng. Token lưu CỤC BỘ trên máy bạn, không đẩy lên GitHub.",
+    dRepo:"GitHub repo (owner/name)", dToken:"Token (Contents: Read and write)",
+    aCopied:"Đã copy prompt! Dán vào Claude để tạo content cho brand này.",
+    aNoCard:"Không có bài nào có card để render.", aRerender:n=>`Render lại ${n} ảnh theo màu mới?`,
+    aRerendered:n=>`✅ Đã render lại ${n} ảnh.`, aEditLink:"Sửa link bài Threads:",
+    aMark:"Đánh dấu ĐÃ ĐĂNG.\nDán link bài trên Threads (có thể để trống):",
+    aUnmark:d=>`Bỏ đánh dấu đã đăng cho ${d}?`, aDelPost:d=>`Xóa bài ${d}?`,
+    aDeploy:r=>`Đẩy tất cả bài/ảnh lên GitHub (${r})?\nCron sẽ tự đăng bài tới giờ.`,
+    aDeployErr:"⚠️ Lỗi deploy:\n", aSyncOk:o=>`✅ ${o}\n(bài đã đăng sẽ hiện ✅ + 🔗 link)`, aSyncErr:o=>`⚠️ ${o}`,
+    aNeedRepo:"Nhập đủ repo + token.", aSavedDeploy:'✅ Đã lưu cấu hình. Bấm "Deploy lên GitHub" lần nữa để đẩy.'
+  },
+  ko: {
+    sub:"여러 브랜드 관리", cal:"📅 전체 브랜드", sync:"🔄 동기화", deploy:"🚀 GitHub 배포",
+    syncTip:"GitHub에서 게시 상태 + 링크 가져오기", langNext:"🇻🇳 Tiếng Việt",
+    brands:"브랜드", addBrand:"+ 브랜드 추가", noBrand:"브랜드가 없습니다.",
+    pickBrand:"왼쪽에서 브랜드를 선택해 콘텐츠 일정을 보세요.",
+    cPosted:"게시", cSched:"예약", cDraft:"초안",
+    rerender:"🎨 이미지 재렌더", copyPrompt:"📋 프롬프트 복사", addPost:"+ 글 추가",
+    schedule:"콘텐츠 일정", noPost:'글이 없습니다. "프롬프트 복사" → Claude 실행 → "글 추가".',
+    stPosted:"✅ 게시됨", stSched:"🔵 예약됨", stDraft:"🟡 초안",
+    viewPost:"🔗 글 보기", editLink:"🔗 링크 수정", markBtn:"✓ 게시 표시",
+    srcHead:"📎 글 소재", srcEmpty:"소재 없음 — ✏️ 눌러 추가", colorTip:"브랜드 색상 — 바꾸면 바로 반영",
+    designTip:"이 브랜드의 카드 디자인", aReStyle:(n,s)=>`디자인을 ${s}로 변경. 글별 고정 안 된 이미지 ${n}개 지금 재렌더할까요?`,
+    view:"이미지 보기", download:"이미지 저장", close:"닫기", reRender:"이미지 재생성", shuffle:"다른 사진으로", lPhoto:"사진 검색어 (Pexels) — 실제 사진용", lStyle:"카드 스타일",
+    eEdit:"글 수정", eAdd:"글 추가",
+    lDate:"날짜 (YYYY-MM-DD)", lTime:"게시 시간 (HH:MM)", lTopic:"주제 태그 (1개)",
+    lContent:"원고 (본문)", lSources:"소재·출처 (링크 + 메모)",
+    srcPh:"여기에 링크 + 메모를 붙여넣으세요\n예:\nhttps://threads.com/@... — 비자 질문 글\nhttps://news... — 최신 정책",
+    lKicker:"카드 kicker", lTag:"카드 tag", lHeadline:"카드 headline (\\n 줄바꿈)",
+    lBody:"카드 body (\\n 줄바꿈)", lCover:"🫥 호기심 블러 (cover — 안 쓰면 비워둠)",
+    lHint:"배지 힌트 (cover 있을 때)", delPost:"🗑️ 글 삭제", cancel:"취소", save:"저장",
+    amTitle:"새 브랜드 추가", amId:"ID (소문자, 공백 없이)", amName:"브랜드 이름",
+    amLocal:"현지 표기 이름", amLang:"언어", amUrl:"Threads 링크",
+    amRed:"강조색 (red)", amInk:"글자색 (ink)", amVoice:"보이스 요약", amOk:"브랜드 생성",
+    calMonth:"", calAll:"전체 브랜드", prev:"이전 달", next:"다음 달",
+    pickMonth:"월/연도 선택", legTime:"시간 = 🇻🇳VN", weekdays:["월","화","수","목","금","토","일"],
+    dTitle:"⚙️ 배포 설정", dDesc:"글/이미지를 GitHub 저장소에 올려 cron이 자동 게시합니다. 토큰은 이 PC에만 저장되며 GitHub로 올라가지 않습니다.",
+    dRepo:"GitHub repo (owner/name)", dToken:"토큰 (Contents: Read and write)",
+    aCopied:"프롬프트 복사 완료! Claude에 붙여넣어 이 브랜드 콘텐츠를 만드세요.",
+    aNoCard:"렌더할 카드가 있는 글이 없습니다.", aRerender:n=>`${n}개 이미지를 새 색상으로 다시 렌더할까요?`,
+    aRerendered:n=>`✅ ${n}개 이미지를 다시 렌더했습니다.`, aEditLink:"Threads 글 링크 수정:",
+    aMark:"게시됨으로 표시.\nThreads 글 링크를 붙여넣으세요 (비워도 됨):",
+    aUnmark:d=>`${d} 게시 표시를 해제할까요?`, aDelPost:d=>`${d} 글을 삭제할까요?`,
+    aDeploy:r=>`모든 글/이미지를 GitHub(${r})에 올릴까요?\ncron이 시간에 맞춰 자동 게시합니다.`,
+    aDeployErr:"⚠️ 배포 오류:\n", aSyncOk:o=>`✅ ${o}\n(게시된 글은 ✅ + 🔗 링크로 표시)`, aSyncErr:o=>`⚠️ ${o}`,
+    aNeedRepo:"repo + 토큰을 모두 입력하세요.", aSavedDeploy:'✅ 설정 저장됨. "GitHub 배포"를 다시 눌러 올리세요.'
+  }
+};
+let LANG = localStorage.getItem('lang') || 'vi';
+const t = k => I18N[LANG][k];
+
+/* ===== state ===== */
+let cur=null;                 // brand id đang xem
+let view={type:'home'};       // {type:'home'|'brand'|'cal', id?, ym?}
+const api=(u,o)=>fetch(u,o).then(r=>r.json());
+const elBrands=document.getElementById('brandList'), elMain=document.getElementById('main');
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const linkify=s=>esc(s).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank">$1</a>');
+function colorDot(s){return s==='posted'?'#16a34a':s==='scheduled'?'#2563eb':'#d97706'}
+
+function applyChrome(){
+  document.getElementById('hSub').textContent=t('sub');
+  document.getElementById('langBtn').textContent=t('langNext');
+  document.getElementById('btnCal').textContent=t('cal');
+  const sb=document.getElementById('btnSync'); sb.textContent=t('sync'); sb.title=t('syncTip');
+  document.getElementById('btnDeploy').textContent=t('deploy');
+  document.getElementById('sideH').textContent=t('brands');
+  document.getElementById('addBtn').textContent=t('addBrand');
+  // add-brand modal labels
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('am_title',t('amTitle'));set('am_l_id',t('amId'));set('am_l_name',t('amName'));set('am_l_local',t('amLocal'));
+  set('am_l_lang',t('amLang'));set('am_l_url',t('amUrl'));set('am_l_red',t('amRed'));set('am_l_ink',t('amInk'));
+  set('am_l_voice',t('amVoice'));set('am_cancel',t('cancel'));set('am_ok',t('amOk'));
+}
+function toggleLang(){
+  LANG = LANG==='vi'?'ko':'vi'; localStorage.setItem('lang',LANG);
+  applyChrome(); rerender();
+}
+function rerender(){
+  if(view.type==='brand') openBrand(view.id);
+  else if(view.type==='cal') showCalendar(view.ym);
+  else { loadBrands(); elMain.innerHTML=`<p class="muted">${t('pickBrand')}</p>`; }
+}
+
+async function loadBrands(){
+  const bs=await api('/api/brands');
+  elBrands.innerHTML=bs.map(b=>`<div class="brand ${cur===b.id?'on':''}" onclick="openBrand('${b.id}')">
+    <div class="nm"><span class="dot" style="background:${b.colors.red}"></span>${b.name}</div>
+    <div class="meta">${b.counts.posted}${t('cPosted')} · ${b.counts.scheduled}${t('cSched')} · ${b.counts.draft}${t('cDraft')}</div></div>`).join('')
+    || `<p class="muted" style="font-size:13px">${t('noBrand')}</p>`;
+}
+async function openBrand(id){
+  cur=id; view={type:'brand',id}; await loadBrands();
+  const d=await api('/api/brand/'+id); const c=d.config;
+  elMain.innerHTML=`<div class="row" style="justify-content:space-between">
+      <div><h1><input type="color" value="${c.colors.red}" title="${t('colorTip')}" onchange="setColor('${id}',this.value)" style="width:30px;height:30px;border:1px solid #ddd;border-radius:7px;cursor:pointer;vertical-align:middle;padding:0;background:none"> ${c.name} <span class="muted">${c.name_local||''}</span></h1>
+      <a class="muted" href="${c.threads_url}" target="_blank">${c.threads_url||''}</a></div>
+      <div class="row"><select title="${t('designTip')}" onchange="setBrandStyle('${id}',this.value)" style="height:34px;border:1px solid #ddd;border-radius:7px;padding:0 8px;cursor:pointer;background:#fff">
+        ${['photo','note','cert','editorial','bold','dark'].map(s=>`<option value="${s}"${(c.card_style||'editorial')===s?' selected':''}>${STYLE_LABEL[s]}</option>`).join('')}
+      </select>
+      <button class="btn ghost" onclick="rerenderAll('${id}')">${t('rerender')}</button>
+      <button class="btn ghost" onclick="copyPrompt('${id}')">${t('copyPrompt')}</button>
+      <button class="btn" onclick="openPost('${id}')">${t('addPost')}</button></div></div>
+    <div class="pillars">🎙️ ${c.voice_summary||''}</div>
+    <h3 style="margin:18px 0 8px">${t('schedule')} (${d.posts.length})</h3>
+    ${d.posts.map(po=>postCard(id,po)).join('') || `<p class="muted">${t('noPost')}</p>`}`;
+}
+function postCard(id,po){
+  const lbl={posted:t('stPosted'),scheduled:t('stSched'),draft:t('stDraft')}[po.status];
+  const imgUrl = po.hasImg?`/img/${id}/${po.id}.png?t=`+Date.now():'';
+  const hasPhoto = po.card && po.card.photoQuery;
+  const card=`<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:8px">
+    <div class="row"><span class="badge b-${po.status}" style="background:${colorDot(po.status)}22;color:${colorDot(po.status)}">${lbl}</span>
+    <b>${po.date}</b> <span class="muted">${po.time_kst} 🇻🇳VN</span> ${po.topic?`<span class="muted">· 🏷️${po.topic}</span>`:''}
+    ${po.permalink?`<a href="${po.permalink}" target="_blank" style="font-weight:700;color:#16a34a;text-decoration:none">${t('viewPost')}</a>`:''}</div>
+    <div class="row">
+    ${po.status==='posted'?`<button class="btn ghost sm" onclick="markPosted('${id}','${po.id}',1)">${t('editLink')}</button><button class="btn ghost sm" onclick="unmarkPosted('${id}','${po.id}')">↩️</button>`
+      :`<button class="btn ghost sm" onclick="markPosted('${id}','${po.id}')">${t('markBtn')}</button>`}
+    ${po.hasImg?`<button class="btn ghost sm" onclick="viewImg('${id}','${po.id}')" title="${t('view')}">🔍</button><a class="btn ghost sm" href="${imgUrl}" download="${po.id}.png" title="${t('download')}">⬇️</a>`:''}
+    ${po.card?`<button class="btn ghost sm" onclick="render('${id}','${po.id}')" title="${t('reRender')}">🖼️</button>`:''}
+    ${hasPhoto?`<button class="btn ghost sm" onclick="shuffleImg('${id}','${po.id}')" title="${t('shuffle')}">🔀</button>`:''}
+    <button class="btn ghost sm" onclick="editPost('${id}','${po.id}')">✏️</button>
+    <button class="btn ghost sm" onclick="delPost('${id}','${po.id}')">🗑️</button></div></div>
+    <div class="post"><img src="${imgUrl}" ${po.hasImg?`onclick="viewImg('${id}','${po.id}')" style="cursor:zoom-in"`:''} onerror="this.style.visibility='hidden'">
+    <div class="txt">${esc(po.text)}</div></div></div>`;
+  const panel=`<div class="srcpanel"><div class="h"><span>${t('srcHead')}</span><span class="add" onclick="editPost('${id}','${po.id}')">✏️</span></div>
+    <div class="body">${po.sources?linkify(po.sources):`<span class="empty">${t('srcEmpty')}</span>`}</div></div>`;
+  return `<div class="postrow">${card}${panel}</div>`;
+}
+function viewImg(id,pid){
+  const url=`/img/${id}/${pid}.png?t=`+Date.now();
+  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="lb" style="display:flex" onclick="if(event.target.id==='lb')this.remove()">
+    <div style="text-align:center"><img src="${url}" style="max-width:min(520px,90vw);max-height:78vh;border-radius:12px;box-shadow:0 12px 50px rgba(0,0,0,.45)">
+    <div class="row" style="justify-content:center;margin-top:14px;gap:10px">
+      <a class="btn" href="${url}" download="${pid}.png">⬇️ ${t('download')}</a>
+      <button class="btn ghost" onclick="document.getElementById('lb').remove()">${t('close')}</button></div></div></div>`);
+}
+async function shuffleImg(id,pid){ const b=document.querySelector(`[onclick="shuffleImg('${id}','${pid}')"]`); if(b)b.textContent='⏳'; await fetch(`/api/brand/${id}/render/${pid}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({shuffle:true})}); openBrand(id); }
+async function copyPrompt(id){const d=await api('/api/brand/'+id+'/prompt');await navigator.clipboard.writeText(d.prompt);alert(t('aCopied'));}
+async function render(id,date){await fetch(`/api/brand/${id}/render/${date}`,{method:'POST'});openBrand(id);}
+const STYLE_LABEL={photo:'🖼️ Poster',note:'📝 Note',cert:'🏛️ Certificate',editorial:'📰 Editorial',bold:'🅱️ Bold',dark:'🌙 Dark'};
+async function setColor(id,red){ await api(`/api/brand/${id}/config`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({colors:{red}})}); await loadBrands(); openBrand(id); }
+async function setBrandStyle(id,style){ await api(`/api/brand/${id}/config`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({card_style:style})}); const d=await api('/api/brand/'+id); const cards=d.posts.filter(p=>p.card&&!p.style); if(cards.length&&confirm(t('aReStyle')(cards.length,STYLE_LABEL[style]))){ for(const po of cards){ await fetch(`/api/brand/${id}/render/${po.id}`,{method:'POST'}); } } openBrand(id); }
+async function rerenderAll(id){ const d=await api('/api/brand/'+id); const cards=d.posts.filter(p=>p.card); if(!cards.length)return alert(t('aNoCard')); if(!confirm(t('aRerender')(cards.length)))return; for(const po of cards){ await fetch(`/api/brand/${id}/render/${po.id}`,{method:'POST'}); } alert(t('aRerendered')(cards.length)); openBrand(id); }
+async function markPosted(id,date,edit){ const link=prompt(edit?t('aEditLink'):t('aMark'),''); if(link===null)return; await api(`/api/brand/${id}/posted/${date}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({permalink:link.trim()})}); await loadBrands(); openBrand(id); }
+async function unmarkPosted(id,date){ if(!confirm(t('aUnmark')(date)))return; await fetch(`/api/brand/${id}/posted/${date}`,{method:'DELETE'}); await loadBrands(); openBrand(id); }
+
+let STU=null;
+async function openPost(id, pre){
+  const d=await api('/api/brand/'+id); const C=d.config.colors;
+  const wm=(d.config.name||id).toLowerCase().replace(/\s+/g,'');
+  const p=pre||{}; const c=p.card||{};
+  let imode='keyword';
+  if(c.photoFile) imode='upload'; else if(c.photoUrl) imode='pick';
+  STU={ id, pid:pre?p.id:'', isNew:!pre, colors:C, wm,
+    date:p.date||'', time:p.time_kst||'08:30', topic:p.topic||'', text:p.text||'', sources:p.sources||'',
+    style:p.style||d.config.card_style||'photo',
+    card:{ kicker:c.kicker||'', headline:c.headline||'', body:c.body||'', tag:c.tag||(d.config.name_local||''), cover:c.cover||'', hint:c.hint||'', bgOpacity:(c.bgOpacity!=null?c.bgOpacity:'') },
+    photoIndex:c.photoIndex, img:{ mode:imode, query:c.photoQuery||'', url:c.photoUrl||'', data:'', file:c.photoFile||'' } };
+  const v=s=>(s==null?'':String(s)).replace(/"/g,'&quot;');
+  const ta=s=>esc(s);
+  const styles=['photo','note','cert','editorial','bold','dark'];
+  const styleOpts=styles.map(s=>`<option value="${s}" ${STU.style===s?'selected':''}>${STYLE_LABEL[s]}</option>`).join('');
+  const html=`<div class="modal" id="pM" style="display:flex"><div class="box" style="max-width:1000px">
+    <div class="row" style="justify-content:space-between"><h2>${pre?t('eEdit'):t('eAdd')} — ${id}</h2>
+      <span class="muted" style="font-size:12px">${pre?('ID: '+p.id):''}</span></div>
+    <div class="studio" style="margin-top:12px">
+      <div class="pvwrap"><div class="pvcard" id="pvcard"></div><div class="pvhint">👁️ Xem trước (ảnh thật sẽ render khi Lưu)</div>
+        <div class="fld" style="margin-top:10px"><label>${t('lStyle')}</label>
+          <select onchange="stU('style',this.value)">${styleOpts}</select></div>
+      </div>
+      <div>
+        <div class="sec" style="border:0;margin:0;padding:0"><h4>🖼️ ${LANG==='ko'?'이미지':'Ảnh'}</h4>
+          <div class="imgtab">
+            <button id="tb_keyword" class="${imode==='keyword'?'on':''}" onclick="imgTab('keyword')">${LANG==='ko'?'키워드':'Từ khóa'}</button>
+            <button id="tb_pick" class="${imode==='pick'?'on':''}" onclick="imgTab('pick')">${LANG==='ko'?'골라넣기':'Chọn ảnh'}</button>
+            <button id="tb_upload" class="${imode==='upload'?'on':''}" onclick="imgTab('upload')">${LANG==='ko'?'업로드':'Tải lên'}</button>
+          </div>
+          <div id="im_keyword" style="display:${imode==='keyword'?'block':'none'}">
+            <input id="pq" value="${v(STU.img.query)}" oninput="STU.img.query=this.value;qPreview()" placeholder="vd: China airport passport">
+            <div class="muted" style="font-size:11px;margin-top:4px">${LANG==='ko'?'입력하면 미리보기에 흐린 배경으로 깔려요':'Gõ xong sẽ tự hiện ảnh nền mờ ở preview'}</div></div>
+          <div id="im_pick" style="display:${imode==='pick'?'block':'none'}">
+            <div class="row" style="gap:6px"><input id="pqs" value="${v(STU.img.query)}" placeholder="${LANG==='ko'?'검색어':'từ khóa tìm'}" style="flex:1" onkeydown="if(event.key==='Enter')pexSearch()"><button class="btn sm" onclick="pexSearch()">🔍</button></div>
+            <div class="thumbs" id="pvthumbs"></div></div>
+          <div id="im_upload" style="display:${imode==='upload'?'block':'none'}">
+            <input type="file" accept="image/*" onchange="upPhoto(this)"></div>
+          <div class="fld" style="margin-top:10px"><label>${LANG==='ko'?'배경 흐림/진하기':'Độ mờ nền'} <span class="muted">(${LANG==='ko'?'흐림':'mờ'} ↔ ${LANG==='ko'?'진하게':'rõ'}) <b id="bgvL">${STU.card.bgOpacity===''?(LANG==='ko'?'자동':'tự động'):STU.card.bgOpacity+'%'}</b></label>
+            <input type="range" min="0" max="60" step="2" value="${STU.card.bgOpacity===''?18:STU.card.bgOpacity}" style="width:100%" oninput="setBgOpacity(+this.value)"></div>
+        </div>
+        <div class="sec"><h4>✏️ ${LANG==='ko'?'카드 텍스트':'Chữ trên thẻ'}</h4>
+          <div class="grid2"><div class="fld"><label>${t('lKicker')}</label><input value="${v(STU.card.kicker)}" oninput="stU('card.kicker',this.value)"></div>
+            <div class="fld"><label>${t('lTag')}</label><input value="${v(STU.card.tag)}" oninput="stU('card.tag',this.value)"></div></div>
+          <div class="fld"><label>${t('lHeadline')} <span class="muted">(*từ* = nổi bật, Enter = xuống dòng)</span></label><textarea style="min-height:54px" oninput="stU('card.headline',this.value)">${ta(STU.card.headline)}</textarea></div>
+          <div class="fld"><label>${t('lBody')}</label><textarea style="min-height:48px" oninput="stU('card.body',this.value)">${ta(STU.card.body)}</textarea></div>
+          <div class="grid2"><div class="fld"><label>${t('lCover')}</label><input value="${v(STU.card.cover)}" oninput="stU('card.cover',this.value)" placeholder="③ ???"></div>
+            <div class="fld"><label>${t('lHint')}</label><input value="${v(STU.card.hint)}" oninput="stU('card.hint',this.value)" placeholder="답은 댓글에서"></div></div>
+        </div>
+        <div class="sec"><h4>🗓️ ${LANG==='ko'?'게시':'Đăng'} + ${LANG==='ko'?'본문/소재':'Nội dung/Nguồn'}</h4>
+          <div class="grid2"><div class="fld"><label>${t('lDate')}</label><input value="${v(STU.date)}" oninput="STU.date=this.value" placeholder="2026-06-25"></div>
+            <div class="fld"><label>${t('lTime')}</label><input value="${v(STU.time)}" oninput="STU.time=this.value"></div></div>
+          <div class="fld"><label>${t('lTopic')}</label><input value="${v(STU.topic)}" oninput="STU.topic=this.value"></div>
+          <div class="fld"><label>${t('lContent')}</label><textarea style="min-height:90px" oninput="STU.text=this.value">${ta(STU.text)}</textarea></div>
+          <div class="fld"><label>${t('lSources')}</label><textarea style="min-height:70px" oninput="STU.sources=this.value">${ta(STU.sources)}</textarea></div>
+        </div>
+        <div class="row" style="margin-top:14px;justify-content:space-between">
+          <div>${pre?`<button class="btn ghost" style="color:#c00" onclick="delPost('${id}','${p.id}',1)">${t('delPost')}</button>`:''}</div>
+          <div class="row"><button class="btn ghost" onclick="document.getElementById('pM').remove()">${t('cancel')}</button>
+          <button class="btn" onclick="savePost('${id}')">${t('save')} + 🖼️</button></div></div>
+      </div>
+    </div></div></div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
+  pvRender();
+  if(STU.img.mode==='pick') pexSearch();
+  if(STU.img.query && !STU.img.url && !STU.img.data && !STU.img.file) qPreview();
+}
+function stU(path,val){ if(path.startsWith('card.')) STU.card[path.slice(5)]=val; else STU[path]=val; pvRender(); }
+function imgTab(mode){ STU.img.mode=mode; ['keyword','pick','upload'].forEach(x=>{document.getElementById('tb_'+x).classList.toggle('on',x===mode);document.getElementById('im_'+x).style.display=x===mode?'block':'none';}); if(mode==='pick'&&!document.getElementById('pvthumbs').childElementCount){const q=document.getElementById('pqs');if(!q.value)q.value=STU.img.query;pexSearch();} pvRender(); }
+async function pexSearch(){ const q=(document.getElementById('pqs').value||'').trim(); STU.img.query=q; const box=document.getElementById('pvthumbs'); box.innerHTML='<span class="muted" style="font-size:12px">⏳...</span>'; const r=await api('/api/pexels-search?q='+encodeURIComponent(q)); if(r.error==='no-key'){box.innerHTML='<span class="muted" style="font-size:12px">Cần key Pexels (nút 🖼️ Pexels)</span>';return;} if(!r.photos||!r.photos.length){box.innerHTML='<span class="muted" style="font-size:12px">Không có ảnh</span>';return;} box.innerHTML=r.photos.map(ph=>`<img src="${ph.thumb}" class="${STU.img.url===ph.url?'sel':''}" onclick="pickThumb('${ph.url}',this)">`).join(''); }
+function pickThumb(url,el){ STU.img.mode='pick'; STU.img.url=url; STU.img.data=''; STU.img.file=''; [...document.getElementById('pvthumbs').children].forEach(x=>x.classList.remove('sel')); el.classList.add('sel'); pvRender(); }
+function upPhoto(inp){ const f=inp.files&&inp.files[0]; if(!f)return; const rd=new FileReader(); rd.onload=()=>{ STU.img.mode='upload'; STU.img.data=rd.result; STU.img.url=''; STU.img.file=''; pvRender(); }; rd.readAsDataURL(f); }
+function pvImgUrl(){ return STU.img.data || STU.img.url || (STU.img.file?`/upimg/${STU.id}/${STU.img.file}`:'') || STU.img.qprev || ''; }
+function setBgOpacity(v){ STU.card.bgOpacity=v; const l=document.getElementById('bgvL'); if(l)l.textContent=v+'%'; pvRender(); }
+let _qpT;
+function qPreview(){ clearTimeout(_qpT); const q=(STU.img.query||'').trim(); if(!q){ STU.img.qprev=''; pvRender(); return; }
+  _qpT=setTimeout(async()=>{ try{ const r=await api('/api/pexels-search?q='+encodeURIComponent(q)); const ph=(r.photos||[])[0]; STU.img.qprev=ph?(ph.url||ph.thumb):''; STU.img.url='';STU.img.data='';STU.img.file=''; }catch{ STU.img.qprev=''; } pvRender(); }, 450); }
+function pvHL(s,boxColor){ const e=esc(s||''); return boxColor?e.replace(/\*([^*]+)\*/g,`<span style="background:${boxColor};color:#fff;padding:0 4px;border-radius:3px">$1</span>`):e.replace(/\*([^*]+)\*/g,`<span style="color:${STU.colors.red}">$1</span>`); }
+function pvBR(s){ return (s||'').replace(/\n/g,'<br>'); }
+function pvRender(){
+  const C=STU.colors, c=STU.card, S=STU.style, el=document.getElementById('pvcard'); if(!el)return;
+  const foot=(light)=>`<div style="position:absolute;left:18px;right:18px;bottom:13px;display:flex;justify-content:space-between;align-items:center;font-size:10px"><b style="color:${light?'#fff':C.ink};font-weight:800">${esc(STU.wm)}<span style="color:${C.red}">.</span></b><span style="color:${light?'#e6e6e6':'#999'};font-weight:700">${esc(c.tag)}</span></div>`;
+  const H=(box)=>`<div style="font-weight:800;line-height:1.16;letter-spacing:-.3px">${pvBR(pvHL(c.headline,box))}</div>`;
+  if(S==='photo'){
+    const u=pvImgUrl();
+    el.style.background=u?`#222 center/cover url('${u}')`:'linear-gradient(135deg,#444,#1a1a1a)';
+    el.innerHTML=`<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.42),rgba(0,0,0,.02) 30%,rgba(0,0,0,.5) 62%,rgba(0,0,0,.9))"></div>
+      ${c.kicker?`<div style="position:absolute;top:16px;left:16px;background:${C.red};color:#fff;font-weight:800;font-size:9px;padding:4px 9px;border-radius:5px">${esc(c.kicker)}</div>`:''}
+      <div style="position:absolute;left:16px;right:16px;bottom:42px;color:#fff;font-size:21px;text-shadow:0 1px 6px rgba(0,0,0,.5)">${H(C.red)}${c.body?`<div style="font-size:11px;color:#f0f0f0;margin-top:6px;line-height:1.4">${pvBR(esc(c.body))}</div>`:''}</div>${foot(true)}`;
+  } else if(S==='bold'){
+    el.style.background='#fff';
+    el.innerHTML=`<div style="position:absolute;top:0;left:0;right:0;background:${C.red};color:#fff;padding:20px 16px 16px">${c.kicker?`<div style="font-size:9px;font-weight:800;letter-spacing:1px;opacity:.92">${esc(c.kicker).toUpperCase()}</div>`:''}<div style="font-size:21px;margin-top:5px;color:#fff">${pvBR(pvHL(c.headline,'#fff').replace(new RegExp('color:#fff','g'),'color:'+C.red+';background:#fff'))}</div></div>
+      <div style="position:absolute;left:16px;right:16px;top:46%;color:${C.ink};font-size:11px;line-height:1.45">${pvBR(esc(c.body))}</div>${foot(false)}`;
+  } else if(S==='dark'){
+    el.style.background='#15130f';
+    el.innerHTML=`<div style="position:absolute;top:0;left:0;width:4px;height:100%;background:${C.red}"></div>
+      <div style="position:absolute;left:20px;right:18px;top:24px">${c.kicker?`<div style="color:${C.red};font-weight:800;font-size:9px;letter-spacing:1px">${esc(c.kicker).toUpperCase()}</div>`:''}
+      <div style="margin-top:12px;color:#f4f1ea;font-size:21px">${pvBR(pvHL(c.headline))}</div>
+      <div style="margin-top:12px;width:26px;height:3px;background:${C.red};border-radius:2px"></div>
+      <div style="margin-top:12px;color:#b9b4a8;font-size:11px;line-height:1.45">${pvBR(esc(c.body))}</div></div>${foot(true)}`;
+  } else if(S==='note'){
+    el.style.background='#fffdf5';
+    el.innerHTML=`<div style="position:absolute;top:0;left:0;right:0;height:6px;background:${C.red}"></div>
+      <div style="position:absolute;left:18px;right:18px;top:24px">${c.kicker?`<div style="display:inline-flex;align-items:center;gap:5px;background:#fff;color:${C.red};border:2px solid ${C.red};font-weight:800;font-size:9px;padding:4px 11px;border-radius:999px;box-shadow:0 3px 0 ${C.red}26">📝 ${esc(c.kicker)}</div>`:''}
+      <div style="margin-top:15px;color:${C.ink};font-size:20px;line-height:1.26">${pvBR(esc(c.headline).replace(/\*([^*]+)\*/g,'<span style="background:linear-gradient(180deg,transparent 0 50%,'+C.red+'5c 50% 92%,transparent 92%);padding:0 3px">$1</span>'))}</div>
+      <div style="margin-top:14px;color:${C.ink};opacity:.88;font-size:11px;line-height:1.5;padding-left:9px;border-left:3px solid ${C.red}59">${pvBR(esc(c.body))}</div></div>
+      <div style="position:absolute;left:18px;right:18px;bottom:36px;border-top:2px dashed ${C.red}66"></div>${foot(false)}`;
+  } else if(S==='cert'){
+    el.style.background='#13110c';
+    el.innerHTML=`<div style="position:absolute;inset:13px;border:2px solid ${C.red}80"></div><div style="position:absolute;inset:18px;border:1px solid ${C.red}40"></div>
+      <div style="position:absolute;left:14px;right:14px;top:26px;text-align:center">
+        <div style="width:34px;height:34px;border-radius:50%;border:2px solid ${C.red};display:flex;align-items:center;justify-content:center;font-size:16px;margin:0 auto">🏛️</div>
+        ${c.kicker?`<div style="margin-top:9px;color:${C.red};font-weight:700;font-size:9px;letter-spacing:2px">${esc(c.kicker).toUpperCase()}</div>`:''}</div>
+      <div style="position:absolute;left:24px;right:24px;top:48%;transform:translateY(-50%);text-align:center;color:#f6f1e6">
+        <div style="font-size:19px;line-height:1.24">${pvBR(pvHL(c.headline))}</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin:11px 0"><span style="width:30px;height:1px;background:${C.red}80"></span><span style="color:${C.red};font-size:8px">◆</span><span style="width:30px;height:1px;background:${C.red}80"></span></div>
+        <div style="color:#cbc3ad;font-size:11px;line-height:1.5">${pvBR(esc(c.body))}</div></div>
+      <div style="position:absolute;left:0;right:0;bottom:30px;text-align:center"><div style="width:60px;height:1px;background:${C.red}66;margin:0 auto 6px"></div><b style="color:#f6f1e6;font-weight:800;font-size:10px">${esc(STU.wm)}<span style="color:${C.red}">.</span></b> <span style="color:#cbc3ad;font-size:9px;font-weight:700">${esc(c.tag)}</span></div>`;
+  } else {
+    el.style.background='#fff';
+    el.innerHTML=`<div style="position:absolute;left:20px;right:18px;top:26px">${c.kicker?`<div style="display:flex;align-items:center;gap:7px;color:${C.red};font-weight:800;font-size:9px;letter-spacing:1px"><span style="width:16px;height:2px;background:${C.red};border-radius:2px"></span>${esc(c.kicker).toUpperCase()}</div>`:''}
+      <div style="margin-top:13px;color:${C.ink};font-size:21px">${pvBR(pvHL(c.headline))}</div>
+      <div style="margin-top:12px;height:1px;background:#0001"></div>
+      <div style="margin-top:12px;color:${C.ink};opacity:.82;font-size:11px;line-height:1.45">${pvBR(esc(c.body))}</div></div>${foot(false)}`;
+  }
+  // nền mờ ảnh thật cho mọi kiểu (trừ photo vốn đã là ảnh full)
+  const pim=pvImgUrl();
+  if(S!=='photo' && pim){ const dk=(S==='cert'||S==='dark'); const bo=STU.card.bgOpacity; const op=(bo!==''&&bo!=null)?(bo/100):(dk?.26:.15); el.insertAdjacentHTML('afterbegin',`<div style="position:absolute;inset:0;z-index:0;background:#000 center/cover no-repeat;background-image:url('${pim}');filter:blur(5px);transform:scale(1.08);opacity:${op}"></div>`); }
+}
+async function savePost(id){
+  const s=STU; const card={ kicker:s.card.kicker, headline:s.card.headline, body:s.card.body, tag:s.card.tag };
+  if(s.card.cover) card.cover=s.card.cover; if(s.card.hint) card.hint=s.card.hint;
+  if(s.card.bgOpacity!==''&&s.card.bgOpacity!=null) card.bgOpacity=s.card.bgOpacity;
+  if(s.photoIndex!=null) card.photoIndex=s.photoIndex;
+  // ảnh
+  if(s.img.data){ const up=await api(`/api/brand/${id}/upload`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({dataUrl:s.img.data,postId:s.pid||s.date})}); if(up.file) card.photoFile=up.file; }
+  else if(s.img.url){ card.photoUrl=s.img.url; }
+  else if(s.img.file){ card.photoFile=s.img.file; }
+  if(s.img.query) card.photoQuery=s.img.query;
+  const body={ date:(s.date||'').trim(), time_kst:(s.time||'').trim(), topic:s.topic, text:s.text, sources:s.sources, style:s.style, card };
+  if(s.pid) body.id=s.pid;
+  if(!body.date||!body.time_kst){ alert('Cần Ngày + Giờ'); return; }
+  const r=await api(`/api/brand/${id}/post`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(r.error)return alert(r.error);
+  const pid=r.id||s.pid;
+  const sv=document.querySelector('#pM .btn:last-child'); if(sv){sv.textContent='🖼️...';sv.disabled=true;}
+  await fetch(`/api/brand/${id}/render/${pid}`,{method:'POST'});
+  const e=document.getElementById('pM'); if(e)e.remove(); openBrand(id);
+}
+async function editPost(id,pid){ const d=await api('/api/brand/'+id); const po=d.posts.find(x=>x.id===pid); openPost(id, po); }
+async function delPost(id,date,fromModal){ if(!confirm(t('aDelPost')(date)))return; await fetch(`/api/brand/${id}/post/${date}`,{method:'DELETE'}); if(fromModal){const e=document.getElementById('pM');if(e)e.remove();} openBrand(id); }
+async function showCalendar(ym){
+  cur=null; view={type:'cal',ym}; await loadBrands();
+  const rows=await api('/api/calendar');
+  const byDate={}; rows.forEach(r=>{(byDate[r.date]=byDate[r.date]||[]).push(r)});
+  if(!ym) ym = rows.length ? rows[0].date.slice(0,7) : new Date().toISOString().slice(0,7);
+  view.ym=ym;
+  const [Y,M]=ym.split('-').map(Number);
+  const days=new Date(Y,M,0).getDate();
+  const startDow=(new Date(Y,M-1,1).getDay()+6)%7; // Mon=0
+  const today=new Date(); const todayStr=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const shift=n=>{let m=M+n,y=Y;if(m<1){m=12;y--}if(m>12){m=1;y++}return `${y}-${String(m).padStart(2,'0')}`};
+  const hds=t('weekdays');
+  let cells=hds.map(h=>`<div class="hd">${h}</div>`).join('');
+  for(let i=0;i<startDow;i++) cells+=`<div class="cell empty"></div>`;
+  for(let d=1;d<=days;d++){
+    const ds=`${ym}-${String(d).padStart(2,'0')}`;
+    const evs=(byDate[ds]||[]).map(r=>{const done=r.status==='posted';return `<div class="ev" onclick="${done&&r.permalink?`window.open('${r.permalink}','_blank')`:`openBrand('${r.brand}')`}" title="${r.brandName} · ${r.time_kst} · ${r.topic||''} (${r.status})" style="${done?'opacity:.72':''}">
+      <span class="d" style="background:${r.color}"></span><span class="tm">${r.time_kst}</span> ${done?'✅ ':''}${r.topic||r.brandName}</div>`}).join('');
+    cells+=`<div class="cell ${ds===todayStr?'today':''}"><div class="day">${d}</div>${evs}</div>`;
+  }
+  const brandsIn=[...new Set(rows.map(r=>r.brand))].map(b=>{const rr=rows.find(x=>x.brand===b);return `<span class="row" style="gap:6px"><span class="dot" style="background:${rr.color}"></span>${rr.brandName}</span>`}).join('');
+  const ttl = LANG==='ko' ? `📅 ${Y}년 ${M}월` : `📅 ${t('calMonth')} ${String(M).padStart(2,'0')}/${Y}`;
+  elMain.innerHTML=`<div class="row" style="justify-content:space-between">
+    <h1>${ttl} <span class="muted">· ${t('calAll')}</span></h1>
+    <div class="row">
+      <button class="btn ghost sm" onclick="showCalendar('${shift(-1)}')" title="${t('prev')}">‹</button>
+      <input type="month" value="${ym}" onchange="showCalendar(this.value)" title="${t('pickMonth')}" style="width:auto;margin:0;padding:7px 10px">
+      <button class="btn ghost sm" onclick="showCalendar('${shift(1)}')" title="${t('next')}">›</button>
+    </div></div>
+    <div class="leg">${brandsIn}<span class="muted">· ${t('legTime')}</span></div>
+    <div class="cal">${cells}</div>`;
+}
+async function sync(){
+  const r=await api('/api/sync',{method:'POST'});
+  alert(r.ok?t('aSyncOk')(r.out):t('aSyncErr')(r.out));
+  if(cur) openBrand(cur); else { await loadBrands(); showCalendar(view.ym); }
+}
+async function deploy(){
+  const cfg=await api('/api/deploy-config');
+  if(!cfg.configured) return deploySettings();
+  if(!confirm(t('aDeploy')(cfg.repo)))return;
+  const r=await api('/api/deploy',{method:'POST'});
+  if(r.needsConfig) return deploySettings();
+  alert(r.ok?r.out:(t('aDeployErr')+r.out));
+}
+function deploySettings(){
+  document.body.insertAdjacentHTML('beforeend',`<div class="modal" id="dM" style="display:flex"><div class="box"><h2>${t('dTitle')}</h2>
+    <p class="muted" style="margin:8px 0">${t('dDesc')}</p>
+    <label>${t('dRepo')}</label><input id="d_repo" placeholder="firstmarketingvat-cmd/threads-platform">
+    <label style="margin-top:10px;display:block">${t('dToken')}</label><input id="d_token" type="password" placeholder="github_pat_...">
+    <div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn ghost" onclick="document.getElementById('dM').remove()">${t('cancel')}</button>
+    <button class="btn" onclick="saveDeploy()">${t('save')}</button></div></div></div>`);
+}
+async function saveDeploy(){
+  const repo=document.getElementById('d_repo').value.trim(), token=document.getElementById('d_token').value.trim();
+  if(!repo||!token)return alert(t('aNeedRepo'));
+  await api('/api/deploy-config',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({repo,token})});
+  document.getElementById('dM').remove(); alert(t('aSavedDeploy'));
+}
+async function pexelsKey(){
+  const cur=await api('/api/pexels-key');
+  const msg=cur.configured?'Đã có Pexels key. Dán key MỚI để thay (hoặc Hủy):':'Dán Pexels API key (lấy ở pexels.com/api):';
+  const k=prompt(msg,''); if(k===null)return;
+  const r=await api('/api/pexels-key',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k.trim()})});
+  alert(r.ok?'✅ Đã lưu Pexels key.':'⚠️ Key trống.');
+}
+function openAdd(){document.getElementById('addM').style.display='flex';}
+function closeAdd(){document.getElementById('addM').style.display='none';}
+async function addBrand(){
+  const g=x=>document.getElementById(x).value;
+  const body={id:g('f_id'),name:g('f_name'),name_local:g('f_local'),language:g('f_lang'),threads_url:g('f_url'),voice_summary:g('f_voice'),
+    colors:{ink:g('f_ink'),red:g('f_red'),bg:'#ffffff',muted:'#6b6b6b'}};
+  const r=await api('/api/brand',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(r.error)return alert(r.error); closeAdd(); cur=body.id; await loadBrands(); openBrand(body.id);
+}
+/* ===== init ===== */
+applyChrome();
+elMain.innerHTML=`<p class="muted">${t('pickBrand')}</p>`;
+loadBrands();
+</script></body></html>
