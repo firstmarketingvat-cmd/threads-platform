@@ -1,7 +1,7 @@
 {
   "id": "redtrans.official",
-  "name": "redtrans.official",
-  "name_local": "",
+  "name": "RedTrans Official",
+  "name_local": "레드트랜스 (번역·공증·인증)",
   "language": "ko",
   "threads_url": "https://www.threads.com/@redtrans.official",
   "colors": {
@@ -25,5 +25,6 @@
       "20:30"
     ],
     "timezone": "Asia/Seoul"
-  }
+  },
+  "card_style": "cert"
 }
