@@ -1,0 +1,17 @@
+{
+  "date": "2026-06-23",
+  "time_kst": "08:00",
+  "topic": "번역",
+  "text": "\"이런 것도 번역돼요?\" 제일 많이 받는 질문이라 한 번 정리할게.\n\n결론부터 말하면 거의 다 돼. 영어·일본어·중국어 같은 메이저 언어만 떠올리는데, 베트남어·태국어·아랍어·러시아어처럼 희귀 언어도 대부분 가능해. 분야도 마찬가지야. 졸업증명서·가족관계증명서 같은 공문서부터 계약서, 의료기록, 특허·기술문서, 회사 정관까지 폭이 넓어.\n\n핵심은 '어떤 언어냐'보다 '어디에 제출하냐'야. 같은 졸업증명서라도 미국 대학 제출용이냐, 베트남 법인설립용이냐에 따라 번역 톤·표기·공증 여부가 다 달라져. 그래서 번역만 덜렁 받으면 정작 제출처에서 막히는 경우가 생겨.\n\n그러니까 견적 물어볼 때 '이 언어 돼요?'보다 '이 서류를 여기 내려는데요'라고 물어보는 게 훨씬 빨라. 언어가 안 되는 경우보다, 용도를 안 밝혀서 두 번 일하는 경우가 더 많거든.",
+  "sources": "📍출처·소재 (수집 2026-06-22)\nhttps://translated.com/frequently-asked-questions — 번역 서비스 FAQ, 다수 언어·분야 커버 범위\nhttps://www.transcc.kr/ — 국내 번역회사, 비즈니스·법률·기술·학술 분야 전문 영역 구분\nhttps://www.inkiti.co.kr/board/index.html?id=board999&no=65 — 한국통번역진흥원 FAQ, 언어/용도/분야별 배정 안내\nhttps://www.threads.com/@hosi.oobo/post/DYGIyZcATGj/ — 긴 글 번역 시 용어·문체 일관성 관련 스레드",
+  "card": {
+    "kicker": "자주 묻는 질문",
+    "headline": "\"이런 것도 번역돼요?\"\n거의 다 됩니다",
+    "body": "관건은 언어가 아니라 '어디에 내느냐'.\n용도부터 말하면 두 번 일 안 해요.",
+    "tag": "번역 · 레드트랜스",
+    "bgOpacity": 32,
+    "photoUrl": "https://images.pexels.com/photos/13820897/pexels-photo-13820897.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    "photoQuery": "번역"
+  },
+  "style": "cert"
+}
