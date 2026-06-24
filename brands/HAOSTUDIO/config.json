@@ -1,0 +1,30 @@
+{
+  "id": "HAOSTUDIO",
+  "name": "HAOSTUDIO",
+  "name_local": "HAOSTUDIO",
+  "language": "ko",
+  "threads_url": "https://www.threads.com/@haostudio_official",
+  "colors": {
+    "ink": "#222222",
+    "red": "#ffc4ff",
+    "bg": "#ffffff",
+    "muted": "#6b6b6b"
+  },
+  "voice_summary": "\"제품의 아이덴티티를 담아낸\n매력적인 사진을 전해드립니다\n.\n👇🏼문의는 하단의 링크를 눌러주세요\"",
+  "threads": {
+    "user_id_secret": "THREADS_USERID_HAOSTUDIO",
+    "token_secret": "THREADS_TOKEN_HAOSTUDIO"
+  },
+  "schedule": {
+    "weekday": [
+      "08:30",
+      "21:00"
+    ],
+    "weekend": [
+      "10:30",
+      "20:30"
+    ],
+    "timezone": "Asia/Seoul"
+  },
+  "card_style": "photo"
+}
