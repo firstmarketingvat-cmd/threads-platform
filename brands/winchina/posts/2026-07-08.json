@@ -1,0 +1,14 @@
+{
+  "date": "2026-07-08",
+  "time_kst": "20:30",
+  "topic": "중국비자",
+  "text": "취업비자(Z) 받았다고 끝난 줄 알지? 진짜 함정은 입국 다음에 온다. 중국 들어가서 1년 이상 거류허가 받으려면 만 18세 이상은 무조건 【건강증명서】를 같이 내야 해. 이게 빠지면 거류증 자체가 안 나와.\n\n포인트 셋만 기억해. 첫째, 항목에 【에이즈·매독】 같은 게 반드시 들어가야 인정된다. 동네 건진센터 기본검진 끊어가면 항목 모자라서 반려당함. 둘째, 검사 시점이 【최근 기간 안】에 받은 거여야 해. 작년에 받아둔 거 들고 가봐야 무효. 셋째, 입국 후 거류증 수속엔 기한이 있고 넘기면 하루당 벌금이 붙는다.\n\n순서가 핵심이야. 비자→입국→건강검진→거류증, 이 라인에서 검진 하나 삐끗하면 전체가 밀린다. 항목·유효기간은 가는 도시 공안·보건센터 기준이 조금씩 달라서, 출국 전에 우리한테 한 번 체크받고 가는 게 제일 안전해.",
+  "sources": "📍출처·소재 (수집 2026-06-23)\nhttps://overseas.mofa.go.kr/cn-xian-ko/wpge/m_21064/contents.do\nhttps://www.china-visa.co.kr/shop/item.php?it_id=1544516131\nhttps://sev.severance.healthcare/sev/patient-carer/appointment/visa/china.do\nhttps://korean.beijing.gov.cn/livinginbeijing/medicalservice/medicalservice/202205/t20220511_2706979.html\n⚠️ 건강증명 검사항목·유효기간·거류증 수속기한·벌금은 가는 도시 공안국·국제여행보건센터 기준으로 공식 재확인",
+  "card": {
+    "kicker": "취업비자 Z · 입국 그 다음",
+    "headline": "Z비자 받고도\n*거류증*에서 막히는 이유",
+    "body": "1년 이상 거류허가 = 건강증명서 필수\n에이즈·매독 등 지정항목 빠지면 반려\n검사 시점·수속기한 넘기면 벌금\n순서 하나 삐끗 = 전체 일정 밀림",
+    "tag": "중국비자",
+    "photoQuery": "medical checkup doctor health"
+  }
+}
