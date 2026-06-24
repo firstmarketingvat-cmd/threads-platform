@@ -38,18 +38,19 @@ for (const id of brands) {
   if (!existsSync(postsDir)) continue;
   const due = [];
   for (const f of readdirSync(postsDir).filter(f => f.endsWith(".json"))) {
+    const pid = f.replace(/\.json$/, "");                 // postId = 파일명 (같은 날 여러 글 지원)
     const o = rj(join(postsDir, f));
-    if (!o.date || !o.time_kst || posted.has(o.date)) continue;
+    if (!o.date || !o.time_kst || posted.has(pid) || posted.has(o.date)) continue;
     const t = schedKstMs(o.date, o.time_kst);
-    if (t <= nowKstMs && t >= nowKstMs - GRACE_MS) due.push(o);
+    if (t <= nowKstMs && t >= nowKstMs - GRACE_MS) due.push({ o, pid });
   }
   if (!due.length) { console.log(`[${id}] 게시할 글 없음`); continue; }
   if (!token || !userId) { console.log(`[${id}] ⚠️ 토큰/유저ID 없음(secret 미설정) — 건너뜀`); continue; }
 
-  for (const o of due) {
-    const imageUrl = `https://raw.githubusercontent.com/${REPO}/${REF}/brands/${id}/images/${o.date}.png`;
+  for (const { o, pid } of due) {
+    const imageUrl = `https://raw.githubusercontent.com/${REPO}/${REF}/brands/${id}/images/${pid}.png`;
     try {
-      console.log(`[${id}] ▶ ${o.date} ${o.time_kst} 게시`);
+      console.log(`[${id}] ▶ ${pid} ${o.time_kst} 게시`);
       if (DRY) { console.log(`   [DRY] ${imageUrl}`); continue; }
       const params = { media_type: "IMAGE", image_url: imageUrl, text: o.text };
       if (o.topic) params.topic_tag = o.topic;
@@ -59,14 +60,14 @@ for (const id of brands) {
       console.log(`   ✅ ${pub.id}`);
       let permalink = "";
       try { const pm = await (await fetch(`${API}/${pub.id}?fields=permalink&access_token=${encodeURIComponent(token)}`)).json(); permalink = pm.permalink || ""; } catch {}
-      appendFileSync(postedFile, o.date + "\n");
+      appendFileSync(postedFile, pid + "\n");
       const pjFile = join(brandsDir, id, "posted.json");
       const map = existsSync(pjFile) ? rj(pjFile) : {};
-      map[o.date] = { id: pub.id, permalink, at: new Date().toISOString() };
+      map[pid] = { id: pub.id, permalink, at: new Date().toISOString() };
       writeFileSync(pjFile, JSON.stringify(map, null, 2));
       console.log(`   🔗 ${permalink || "(no permalink)"}`);
       total++;
-    } catch (e) { console.error(`   ❌ ${o.date} 실패: ${e.message}`); }
+    } catch (e) { console.error(`   ❌ ${pid} 실패: ${e.message}`); }
   }
 }
 console.log(`완료: 총 ${total}건 게시 (brand ${brands.length}개 점검).`);
